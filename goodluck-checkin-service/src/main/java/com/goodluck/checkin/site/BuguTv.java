@@ -10,15 +10,20 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 /**
  * @author liuleyi
  */
 @Slf4j
+@Service
 public class BuguTv {
-    // 配置部分
-    private static final String USERNAME = "u3ck03223";  // 替换为您的用户名
-    private static final String PASSWORD = "12745224049";  // 替换为您的密码
+    @Value("${bugutv.username}")
+    private String username;
+    @Value("${bugutv.password}")
+    private String password; // 替换为您的密码
     private static final String LOGIN_URL = "https://www.bugutv.org";
     private static final String USER_URL = "https://www.bugutv.org/user";
 
@@ -26,16 +31,16 @@ public class BuguTv {
     private static WebDriver initBrowser() {
         WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("--start-maximized");
-//        options.addArguments("--headless");  // 启用无头模式
-//        options.addArguments("--no-sandbox");  // 在某些 Linux 环境下需要
-//        options.addArguments("--disable-dev-shm-usage");  // 解决共享内存问题
+//        options.addArguments("--start-maximized");
+        options.addArguments("--headless");  // 启用无头模式
+        options.addArguments("--no-sandbox");  // 在某些 Linux 环境下需要
+        options.addArguments("--disable-dev-shm-usage");  // 解决共享内存问题
         WebDriver browser = new ChromeDriver(options);
         return browser;
     }
 
 
-    public static void loginAndCheckin() {
+    public void loginAndCheckin() {
         WebDriver browser = initBrowser();
         try {
             // 打开登录页面
@@ -52,9 +57,9 @@ public class BuguTv {
 
             // 登录成功后延迟3秒跳转到用户页面
             Thread.sleep(1000);
-            usernameField.sendKeys(USERNAME);
+            usernameField.sendKeys(username);
             Thread.sleep(1000);
-            passwordField.sendKeys(PASSWORD);
+            passwordField.sendKeys(password);
             Thread.sleep(1000);
             loginButton.click();
 
@@ -99,8 +104,5 @@ public class BuguTv {
     }
 
 
-    public static void main(String[] args) {
-        loginAndCheckin();
-    }
 
 }

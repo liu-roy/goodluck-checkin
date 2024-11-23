@@ -23,18 +23,22 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class CheckinController {
 
+    private final BuguTv buguTv;
+
+    private final Shaoshuren shaoshuren;
+
 
     @PostMapping("/buguTV")
     @ApiOperation("buguTV")
-    public R<Boolean> buguTV() {
-        BuguTv.loginAndCheckin();
+    public R<Boolean> buguTVCheckIn() {
+        buguTv.loginAndCheckin();
         return R.success(Boolean.TRUE);
     }
 
     @PostMapping("/shaoshuren")
     @ApiOperation("shaoshuren")
-    public R<Boolean> shaoshuren() {
-        Shaoshuren.loginAndCheckin();
+    public R<Boolean> shaoshurenCheckIn() {
+        shaoshuren.loginAndCheckin();
         return R.success(Boolean.TRUE);
     }
 
