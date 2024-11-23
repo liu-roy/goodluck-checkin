@@ -29,7 +29,7 @@ jobs:
 
       - name: Build the Docker image with cache
         run: |
-          docker buildx build . --file DockerFileChrome --tag centos7-java8-chrome110 --cache-from=type=gha --cache-to=type=gha,mode=max .
+          docker buildx build . --file DockerFileChrome --tag centos7-java8-chrome110 --cache-from=type=gha --cache-to=type=gha,mode=max --push .
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
