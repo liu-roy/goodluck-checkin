@@ -22,7 +22,13 @@ jobs:
           java-version: 8
           # The path to the `.java-version` file. See examples of supported syntax in README file
           distribution: zulu
-          
+
+      # 设置maven setting
+      - name: Configure Maven settings
+        run: |
+          mkdir -p ~/.m2
+          echo "${{ secrets.MAVEN_SETTINGS }}" > ~/.m2/settings.xml  # 将 GitHub Secrets 中的 MAVEN_SETTINGS 文件内容写入到 ~/.m2/settings.xml
+
       # 使用 Maven 构建项目
       - name: Build with Maven
         run: mvn clean package -DskipTests
