@@ -7,6 +7,7 @@ ADD target/goodluck-checkin-service-1.0.0-SNAPSHOT.jar /deployments/app.jar
 
 # 添加启动脚本
 
+
 # Set environment variables
 ENV LANG=en_US.UTF-8
 ENV TZ=Asia/Shanghai
