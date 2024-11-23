@@ -13,6 +13,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -33,6 +34,7 @@ public class Shaoshuren {
 
     private static final String LOGIN_URL = "https://xn--gmqz83awjh.net/auth/login";
     private static final String USER_URL = "https://xn--gmqz83awjh.net/user";
+
     // 初始化浏览器（以 Chrome 为例）
     private static WebDriver initBrowser() {
         WebDriverManager.chromedriver().setup();
@@ -45,7 +47,9 @@ public class Shaoshuren {
         return browser;
     }
 
-    public  void loginAndCheckin() {
+    @Scheduled(cron = "0 0 7 * * ?")
+    public void loginAndCheckin() {
+        log.info("少数人开始登录并签到...");
         WebDriver browser = initBrowser();
         try {
             // 打开登录页面
@@ -82,7 +86,7 @@ public class Shaoshuren {
             }
 
             // 检查按钮是否已禁用（通过 "disabled" 属性或类名）
-            if (signInButton == null ||signInButton.getAttribute("class").contains("disabled") ||
+            if (signInButton == null || signInButton.getAttribute("class").contains("disabled") ||
                     signInButton.getAttribute("disabled") != null) {
                 log.info("今日已签到，无需重复操作。");
             } else {
@@ -107,6 +111,7 @@ public class Shaoshuren {
             }
             browser.quit();
         }
+        log.info("少数人结束登录并签到...");
     }
 
 }

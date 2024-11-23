@@ -10,6 +10,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -20,10 +21,13 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 public class BuguTv {
+
     @Value("${bugutv.username}")
     private String username;
+
     @Value("${bugutv.password}")
     private String password; // 替换为您的密码
+
     private static final String LOGIN_URL = "https://www.bugutv.org";
     private static final String USER_URL = "https://www.bugutv.org/user";
 
@@ -40,7 +44,9 @@ public class BuguTv {
     }
 
 
+    @Scheduled(cron = "0 0 7 * * ?")
     public void loginAndCheckin() {
+        log.info("布谷开始登录并签到...");
         WebDriver browser = initBrowser();
         try {
             // 打开登录页面
@@ -69,9 +75,7 @@ public class BuguTv {
 
             try {
                 // 检查是否已签到
-                WebElement button = new WebDriverWait(browser, 10).until(
-                        ExpectedConditions.presenceOfElementLocated(By.xpath("//button[contains(@class, 'go-user-qiandao')]"))
-                );
+                WebElement button = new WebDriverWait(browser, 10).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//button[contains(@class, 'go-user-qiandao')]")));
 
                 if (button.getAttribute("outerHTML").contains("disabled")) {
                     log.info("今日已签到，无需重复操作。");
@@ -80,9 +84,7 @@ public class BuguTv {
                     button.click();
 
                     // 检查签到成功提示
-                    WebElement successMessage = new WebDriverWait(browser, 10).until(
-                            ExpectedConditions.presenceOfElementLocated(By.xpath("//p[contains(text(), ' 今日签到成功')]"))
-                    );
+                    WebElement successMessage = new WebDriverWait(browser, 10).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//p[contains(text(), ' 今日签到成功')]")));
                     log.info("签到成功！");
                 }
 
@@ -101,8 +103,8 @@ public class BuguTv {
             }
             browser.quit();
         }
+        log.info("布谷结束签到...");
     }
-
 
 
 }
