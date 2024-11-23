@@ -1,0 +1,95 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.goodluck</groupId>
+        <artifactId>goodluck-checkin</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+    <artifactId>goodluck-checkin-service</artifactId>
+    <name>everyday-checkin-service</name>
+    <dependencies>
+
+        <dependency>
+            <groupId>com.goodluck</groupId>
+            <artifactId>goodluck-checkin-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+         <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+        </dependency>
+        <!-- Selenium Java -->
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>3.141.59</version>
+        </dependency>
+        <!-- WebDriver Manager -->
+        <dependency>
+            <groupId>io.github.bonigarcia</groupId>
+            <artifactId>webdrivermanager</artifactId>
+            <version>5.5.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.goodluck</groupId>
+            <artifactId>goodluck-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.goodluck</groupId>
+            <artifactId>goodluck-swagger-boot</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.goodluck</groupId>
+            <artifactId>goodluck-web-boot</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <!--内部组件-->
+        <!--        <dependency>-->
+        <!--            <groupId>com.goodluck</groupId>-->
+        <!--            <artifactId>goodluck-mybatisplus-boot</artifactId>-->
+        <!--        </dependency>-->
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter</artifactId>
+        </dependency>
+        <!--监控相关-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <!--普罗米修斯相关-->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+
+        <!-- druid 官方 starter -->
+        <!--    <dependency>-->
+        <!--      <groupId>com.alibaba</groupId>-->
+        <!--      <artifactId>druid-spring-boot-starter</artifactId>-->
+        <!--    </dependency>-->
+        <!--    <dependency>-->
+        <!--      <groupId>mysql</groupId>-->
+        <!--      <artifactId>mysql-connector-java</artifactId>-->
+        <!--    </dependency>-->
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+    </dependencies>
+</project>
