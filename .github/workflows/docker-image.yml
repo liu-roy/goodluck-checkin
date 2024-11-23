@@ -15,4 +15,4 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Build the Docker image
-      run: docker build . --file DockerfileChrome --tag centos7-java8-chrome110
+      run: docker build . --file DockerFileChrome --tag centos7-java8-chrome110
