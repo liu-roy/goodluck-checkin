@@ -1,0 +1,23 @@
+# 使用 CentOS 7 基础镜像
+FROM  insideo/centos7-java8-build
+
+RUN mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.bak && \
+    curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo && \
+    yum clean all && \
+    yum makecache
+
+# 更新系统和安装基础工具
+RUN yum update -y && \
+    yum install -y wget unzip fontconfig libX11 libXcomposite libXcursor libXdamage \
+       libXext libXi libXtst cups-libs libXScrnSaver pango alsa-lib atk at-spi2-atk gtk3 \
+       mesa-libEGL mesa-libgbm && \
+    yum clean all
+
+# 安装 Google Chrome
+RUN wget https://mirrors.aliyun.com/google-chrome/google-chrome/google-chrome-stable-110.0.5481.100-1.x86_64.rpm && \
+    yum install -y ./google-chrome-stable-110.0.5481.100-1.x86_64.rpm && \
+    rm -f google-chrome-stable-110.0.5481.100-1.x86_64.rpm && \
+    yum clean all
+
+CMD ["bash"]
+
