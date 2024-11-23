@@ -17,4 +17,4 @@ ENV engine.mode=RUNTIME
 # Expose port
 EXPOSE 8080
 
-CMD ["java", "-jar", "/deployments/app.jar"]
+ENTRYPOINT ["java", "-jar", "/deployments/app.jar","--spring.config.location=/tmp/application.yml"]
