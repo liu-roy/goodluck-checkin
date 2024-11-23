@@ -10,8 +10,11 @@ RUN mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.bak &
 RUN yum update -y && \
     yum install -y wget unzip fontconfig libX11 libXcomposite libXcursor libXdamage \
        libXext libXi libXtst cups-libs libXScrnSaver pango alsa-lib atk at-spi2-atk gtk3 \
-       mesa-libEGL mesa-libgbm && \
+       mesa-libEGL mesa-libgbm dbus && \
     yum clean all
+
+RUN yum install -y dbus
+
 
 # 安装 Google Chrome
 RUN wget https://mirrors.aliyun.com/google-chrome/google-chrome/google-chrome-stable-110.0.5481.100-1.x86_64.rpm && \
@@ -19,5 +22,5 @@ RUN wget https://mirrors.aliyun.com/google-chrome/google-chrome/google-chrome-st
     rm -f google-chrome-stable-110.0.5481.100-1.x86_64.rpm && \
     yum clean all
 
-CMD ["bash"]
+CMD ["/bin/bash"]
 
