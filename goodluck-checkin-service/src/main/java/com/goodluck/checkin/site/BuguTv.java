@@ -1,9 +1,12 @@
 package com.goodluck.checkin.site;
 
 
+import com.goodluck.common.exception.BusinessException;
+import com.google.common.base.Throwables;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -14,6 +17,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import static com.goodluck.checkin.utils.SeleniumUtils.safeWaitForElement;
 
 /**
  * @author liuleyi
@@ -35,76 +40,87 @@ public class BuguTv {
     private static WebDriver initBrowser() {
         WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
-//        options.addArguments("--start-maximized");
-        options.addArguments("--headless");  // 启用无头模式
-        options.addArguments("--no-sandbox");  // 在某些 Linux 环境下需要
-        options.addArguments("--disable-dev-shm-usage");  // 解决共享内存问题
+        options.addArguments("--start-maximized");
+//        options.addArguments("--headless");  // 启用无头模式
+//        options.addArguments("--no-sandbox");  // 在某些 Linux 环境下需要
+//        options.addArguments("--disable-dev-shm-usage");  // 解决共享内存问题
         WebDriver browser = new ChromeDriver(options);
         return browser;
     }
 
 
-    @Scheduled(cron = "0 0 7 * * ?")
-    public void loginAndCheckin() {
-        log.info("布谷开始登录并签到...");
+    @Scheduled(fixedDelay = 11 * 60 * 60 * 1000+30000)
+    public void loginAndCheckIn() {
+        log.info("--------------------布谷tv每日签到程序启动----------------------");
         WebDriver browser = initBrowser();
         try {
-            // 打开登录页面
+            WebDriverWait wait = new WebDriverWait(browser, 10); //
             browser.get(LOGIN_URL);
 
+            // 点击登录按钮，触发登录弹窗
+            WebElement loginTriggerButton = wait.until(ExpectedConditions.elementToBeClickable(
+                    By.cssSelector("a.login-btn.navbar-button")));
+            loginTriggerButton.click();
+
+            // 等待弹窗加载完成（Swal.fire 动态加载）
+            wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".swal2-container")));
+
+            // 等待表单内容加载完成
+            WebElement usernameField = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                    By.cssSelector("input[name='username']")));
+            WebElement passwordField = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                    By.cssSelector("input[name='password']")));
+            WebElement loginButton = wait.until(ExpectedConditions.elementToBeClickable(
+                    By.cssSelector("button.go-login")));
+
+            // 输入用户名和密码
+            usernameField.sendKeys(username); // 替换为实际的用户名或邮箱
+            passwordField.sendKeys(password);         // 替换为实际的密码
+
             // 点击登录按钮
-            WebDriverWait wait = new WebDriverWait(browser, 10);
-            wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[contains(text(),'登录')]"))).click();
-
-            // 输入用户名和密码并提交登录
-            WebElement usernameField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("input[name='username']")));
-            WebElement passwordField = browser.findElement(By.cssSelector("input[type='password']"));
-            WebElement loginButton = browser.findElement(By.xpath("//button[contains(@class,'go-login')]"));
-
-            // 登录成功后延迟3秒跳转到用户页面
-            Thread.sleep(1000);
-            usernameField.sendKeys(username);
-            Thread.sleep(1000);
-            passwordField.sendKeys(password);
-            Thread.sleep(1000);
             loginButton.click();
 
-            // 登录成功后延迟3秒跳转到用户页面
-            Thread.sleep(3000);
+            // 等待登录完成后的页面标志（比如跳转或特定元素出现）
+            waitForAjaxLoad(browser);
+
+            // 跳转到用户页面
             browser.get(USER_URL);
 
-            try {
-                // 检查是否已签到
-                WebElement button = new WebDriverWait(browser, 10).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//button[contains(@class, 'go-user-qiandao')]")));
-
-                if (button.getAttribute("outerHTML").contains("disabled")) {
-                    log.info("今日已签到，无需重复操作。");
-                } else {
-                    log.info("未签到，尝试签到...");
-                    button.click();
-
-                    // 检查签到成功提示
-                    WebElement successMessage = new WebDriverWait(browser, 10).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//p[contains(text(), ' 今日签到成功')]")));
-                    log.info("签到成功！");
-                }
-
-            } catch (Exception e) {
-                log.info("未找到签到按钮，可能页面加载不完全或元素缺失。");
+            // 检查是否签到
+            WebElement alreadySignIn = safeWaitForElement(browser, By.xpath("//button[contains(text(), '今日已签到')]"), 5);
+            if (alreadySignIn != null) {
+                log.info("布谷tv今日已签到！提示信息: " + alreadySignIn.getText());
+                return;
             }
-
+            log.info("布谷tv未签到，尝试签到...");
+            WebElement signInButton = new WebDriverWait(browser, 10).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//button[contains(@class, 'go-user-qiandao')]")));
+            if (signInButton == null) {
+                throw new BusinessException("签到按钮未找到！");
+            }
+            signInButton.click();
+            alreadySignIn = safeWaitForElement(browser, By.xpath("//button[contains(text(), '今日已签到')]"), 5);
+            if (alreadySignIn == null) {
+                throw new BusinessException("布谷tv签到失败！未找到签到成功标记！");
+            }
+            log.info("布谷tv签到成功");
         } catch (Exception e) {
-            log.info("出现错误: " + e.getMessage());
+            log.error("签到过程中出现问题: [{}] ", Throwables.getStackTraceAsString(e));
         } finally {
             // 关闭浏览器
             try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+                Thread.sleep(3000);
+                browser.quit();
+            } catch (Exception e) {
+                log.error("关闭浏览器失败 {}", Throwables.getStackTraceAsString(e));
             }
-            browser.quit();
+
         }
-        log.info("布谷结束签到...");
+        log.info("--------------------布谷tv每日签到程序结束----------------------");
     }
-
-
+    private static void waitForAjaxLoad(WebDriver driver) {
+        WebDriverWait wait = new WebDriverWait(driver, 15);
+        wait.until(webDriver -> ((JavascriptExecutor) webDriver)
+                .executeScript("return jQuery.active == 0")
+                .equals(true));
+    }
 }
