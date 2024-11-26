@@ -40,10 +40,10 @@ public class BuguTv {
     private static WebDriver initBrowser() {
         WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("--start-maximized");
-//        options.addArguments("--headless");  // 启用无头模式
-//        options.addArguments("--no-sandbox");  // 在某些 Linux 环境下需要
-//        options.addArguments("--disable-dev-shm-usage");  // 解决共享内存问题
+//        options.addArguments("--start-maximized");
+        options.addArguments("--headless");  // 启用无头模式
+        options.addArguments("--no-sandbox");  // 在某些 Linux 环境下需要
+        options.addArguments("--disable-dev-shm-usage");  // 解决共享内存问题
         WebDriver browser = new ChromeDriver(options);
         return browser;
     }
