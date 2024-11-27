@@ -3,7 +3,7 @@ FROM  liuroy/centos7-java8-chrome110
 
 # Add application jar
 ADD target/goodluck-checkin-service-1.0.0-SNAPSHOT.jar /deployments/app.jar
-ADD run /opt/run-java
+COPY run /opt/run-java
 # 添加启动脚本
 # Set environment variables
 ENV LANG=en_US.UTF-8
