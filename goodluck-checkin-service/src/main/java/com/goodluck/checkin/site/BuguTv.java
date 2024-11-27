@@ -62,9 +62,6 @@ public class BuguTv {
                     By.cssSelector("a.login-btn.navbar-button")));
             loginTriggerButton.click();
 
-            // 等待弹窗加载完成（Swal.fire 动态加载）
-            wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".swal2-container")));
-
             // 等待表单内容加载完成
             WebElement usernameField = wait.until(ExpectedConditions.visibilityOfElementLocated(
                     By.cssSelector("input[name='username']")));
