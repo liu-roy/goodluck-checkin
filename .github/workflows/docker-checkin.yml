@@ -43,7 +43,7 @@ jobs:
         run: mvn clean package -DskipTests -s ~/.m2/settings.xml
 
       - name: Build the Docker image
-        run: docker build --tag liuroy/goodluck-checkin --file ./Dockerfile ./goodluck-checkin-service
+        run: docker build --tag liuroy/goodluck-checkin --file ./Dockerfile
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
