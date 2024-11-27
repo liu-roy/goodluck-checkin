@@ -54,7 +54,7 @@ public class BuguTv {
         log.info("--------------------布谷tv每日签到程序启动----------------------");
         WebDriver browser = initBrowser();
         try {
-            WebDriverWait wait = new WebDriverWait(browser, 10); //
+            WebDriverWait wait = new WebDriverWait(browser, 20); //
             browser.get(LOGIN_URL);
 
             // 点击登录按钮，触发登录弹窗
@@ -84,18 +84,18 @@ public class BuguTv {
             browser.get(USER_URL);
 
             // 检查是否签到
-            WebElement alreadySignIn = safeWaitForElement(browser, By.xpath("//button[contains(text(), '今日已签到')]"), 5);
+            WebElement alreadySignIn = safeWaitForElement(browser, By.xpath("//button[contains(text(), '今日已签到')]"), 10);
             if (alreadySignIn != null) {
                 log.info("布谷tv今日已签到！提示信息: " + alreadySignIn.getText());
                 return;
             }
             log.info("布谷tv未签到，尝试签到...");
-            WebElement signInButton = new WebDriverWait(browser, 10).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//button[contains(@class, 'go-user-qiandao')]")));
+            WebElement signInButton = new WebDriverWait(browser, 20).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//button[contains(@class, 'go-user-qiandao')]")));
             if (signInButton == null) {
                 throw new BusinessException("签到按钮未找到！");
             }
             signInButton.click();
-            alreadySignIn = safeWaitForElement(browser, By.xpath("//button[contains(text(), '今日已签到')]"), 5);
+            alreadySignIn = safeWaitForElement(browser, By.xpath("//button[contains(text(), '今日已签到')]"), 10);
             if (alreadySignIn == null) {
                 throw new BusinessException("布谷tv签到失败！未找到签到成功标记！");
             }
