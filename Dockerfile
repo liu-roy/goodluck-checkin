@@ -11,6 +11,8 @@ ENV TZ=Asia/Shanghai
 ENV engine.mode=RUNTIME
 
 RUN chmod +x /opt/run-java/run-java.sh
+RUN chmod +x /opt/run-java/run-env.sh
+
 
 # Expose port
 EXPOSE 8080
