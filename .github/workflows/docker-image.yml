@@ -1,6 +1,13 @@
 name: Docker Image CI
 
-
+on:
+  workflow_dispatch:
+    inputs:
+      action_name:
+        description: 'Choose the action to perform'
+        required: true
+        default: 'build'
+        type: string
 jobs:
 
   build:
