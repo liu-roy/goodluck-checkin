@@ -8,12 +8,20 @@ RUN mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.bak &
 
 # 更新系统和安装基础工具
 RUN yum update -y && \
-    yum install -y wget unzip fonts-noto-cjk fontconfig libX11 libXcomposite libXcursor libXdamage \
+    yum install -y wget unzip fontconfig libX11 libXcomposite libXcursor libXdamage \
        libXext libXi libXtst cups-libs libXScrnSaver pango alsa-lib atk at-spi2-atk gtk3 \
        mesa-libEGL mesa-libgbm dbus && \
     yum clean all
 
 RUN yum install -y dbus
+
+# 安装常用的中文字体包
+RUN yum install -y fonts-noto-cjk google-noto-cjk-fonts \
+    && yum clean all \
+    && fc-cache -f -v
+
+# 设置环境变量，确保字体被正确加载
+ENV FONTCONFIG_PATH=/etc/fonts
 
 
 # 安装 Google Chrome
