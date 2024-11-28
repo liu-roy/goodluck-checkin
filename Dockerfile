@@ -8,7 +8,6 @@ COPY run /opt/run-java
 # Set environment variables
 ENV LANG=en_US.UTF-8
 ENV TZ=Asia/Shanghai
-ENV engine.mode=RUNTIME
 
 RUN chmod +x /opt/run-java/run-java.sh
 RUN chmod +x /opt/run-java/run-env.sh
