@@ -2,6 +2,13 @@ name: checkin app ci
 
 # 触发条件，例如推送到主分支
 on:
+  workflow_dispatch:
+    inputs:
+      action_name:
+        description: 'Choose the action to perform'
+        required: true
+        default: 'build'
+        type: string
   push:
     branches:
       - main
