@@ -63,7 +63,7 @@ public class BuguTv {
             browser.get(LOGIN_URL);
 
             File screenshot = ((TakesScreenshot) browser).getScreenshotAs(OutputType.FILE);
-            Files.copy(screenshot.toPath(), Paths.get("screenshot.png"));
+            Files.copy(screenshot.toPath(), Paths.get("/opt/images/screenshot.png"));
 
             // 点击登录按钮，触发登录弹窗
             WebElement loginTriggerButton = wait.until(ExpectedConditions.elementToBeClickable(
@@ -71,7 +71,7 @@ public class BuguTv {
             loginTriggerButton.click();
 
             File screenshot2 = ((TakesScreenshot) browser).getScreenshotAs(OutputType.FILE);
-            Files.copy(screenshot2.toPath(), Paths.get("screenshot2.png"));
+            Files.copy(screenshot2.toPath(), Paths.get("/opt/images/screenshot2.png"));
 
             // 等待表单内容加载完成
             WebElement usernameField = wait.until(ExpectedConditions.visibilityOfElementLocated(
@@ -82,7 +82,7 @@ public class BuguTv {
                     By.cssSelector("button.go-login")));
 
             File screenshot3 = ((TakesScreenshot) browser).getScreenshotAs(OutputType.FILE);
-            Files.copy(screenshot3.toPath(), Paths.get("screenshot3.png"));
+            Files.copy(screenshot3.toPath(), Paths.get("/opt/images/screenshot3.png"));
 
             // 输入用户名和密码
             usernameField.sendKeys(username); // 替换为实际的用户名或邮箱
@@ -90,7 +90,7 @@ public class BuguTv {
 
             // 截图
             File screenshot4 = ((TakesScreenshot) browser).getScreenshotAs(OutputType.FILE);
-            Files.copy(screenshot4.toPath(), Paths.get("screenshot4.png"));
+            Files.copy(screenshot4.toPath(), Paths.get("/opt/images/screenshot4.png"));
 
             // 点击登录按钮
             loginButton.click();
@@ -100,14 +100,14 @@ public class BuguTv {
 
             // 截图
             File screenshot5 = ((TakesScreenshot) browser).getScreenshotAs(OutputType.FILE);
-            Files.copy(screenshot5.toPath(), Paths.get("screenshot5.png"));
+            Files.copy(screenshot5.toPath(), Paths.get("/opt/images/screenshot5.png"));
 
             // 跳转到用户页面
             browser.get(USER_URL);
 
             // 截图
             File screenshot6 = ((TakesScreenshot) browser).getScreenshotAs(OutputType.FILE);
-            Files.copy(screenshot6.toPath(), Paths.get("screenshot6.png"));
+            Files.copy(screenshot6.toPath(), Paths.get("/opt/images/screenshot6.png"));
 
             // 检查是否签到
             WebElement alreadySignIn = safeWaitForElement(browser, By.xpath("//button[contains(text(), '今日已签到')]"), 10);
