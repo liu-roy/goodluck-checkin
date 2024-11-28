@@ -5,10 +5,7 @@ import com.goodluck.common.exception.BusinessException;
 import com.google.common.base.Throwables;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import lombok.extern.slf4j.Slf4j;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -17,6 +14,10 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import static com.goodluck.checkin.utils.SeleniumUtils.safeWaitForElement;
 
@@ -41,9 +42,13 @@ public class BuguTv {
         WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
 //        options.addArguments("--start-maximized");
-        options.addArguments("--headless");  // 启用无头模式
-        options.addArguments("--no-sandbox");  // 在某些 Linux 环境下需要
-        options.addArguments("--disable-dev-shm-usage");  // 解决共享内存问题
+        // 启用无头模式
+        options.addArguments("--headless");
+        // 在某些 Linux 环境下需要
+        options.addArguments("--no-sandbox");
+        // 解决共享内存问题
+        options.addArguments("--disable-dev-shm-usage");
+        options.addArguments("--window-size=1920,1080");
         WebDriver browser = new ChromeDriver(options);
         return browser;
     }
@@ -61,6 +66,9 @@ public class BuguTv {
             WebElement loginTriggerButton = wait.until(ExpectedConditions.elementToBeClickable(
                     By.cssSelector("a.login-btn.navbar-button")));
             loginTriggerButton.click();
+
+//            File screenshot = ((TakesScreenshot) browser).getScreenshotAs(OutputType.FILE);
+//            Files.copy(screenshot.toPath(), Paths.get("screenshot.png"));
 
             // 等待表单内容加载完成
             WebElement usernameField = wait.until(ExpectedConditions.visibilityOfElementLocated(

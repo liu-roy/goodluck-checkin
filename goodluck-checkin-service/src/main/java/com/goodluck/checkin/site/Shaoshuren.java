@@ -40,9 +40,13 @@ public class Shaoshuren {
         WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
 //        options.addArguments("--start-maximized");
-        options.addArguments("--headless");  // 启用无头模式
-        options.addArguments("--no-sandbox");  // 在某些 Linux 环境下需要
-        options.addArguments("--disable-dev-shm-usage");  // 解决共享内存问题
+        // 启用无头模式
+        options.addArguments("--headless");
+        // 在某些 Linux 环境下需要
+        options.addArguments("--no-sandbox");
+        // 解决共享内存问题
+        options.addArguments("--disable-dev-shm-usage");
+        options.addArguments("--window-size=1920,1080");
         WebDriver browser = new ChromeDriver(options);
         return browser;
     }
