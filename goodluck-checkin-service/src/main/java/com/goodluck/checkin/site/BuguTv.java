@@ -46,6 +46,8 @@ public class BuguTv {
         options.addArguments("--headless");
         // 在某些 Linux 环境下需要
         options.addArguments("--no-sandbox");
+        // 设置为简体中文
+        options.addArguments("--lang=zh-CN");
         // 解决共享内存问题
         options.addArguments("--disable-dev-shm-usage");
         options.addArguments("--window-size=1920,1080");
