@@ -8,7 +8,7 @@ RUN mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.bak &
 
 # 更新系统和安装基础工具
 RUN yum update -y && \
-    yum install -y wget unzip fontconfig libX11 libXcomposite libXcursor libXdamage \
+    yum install -y wget unzip fonts-noto-cjk fontconfig libX11 libXcomposite libXcursor libXdamage \
        libXext libXi libXtst cups-libs libXScrnSaver pango alsa-lib atk at-spi2-atk gtk3 \
        mesa-libEGL mesa-libgbm dbus && \
     yum clean all
