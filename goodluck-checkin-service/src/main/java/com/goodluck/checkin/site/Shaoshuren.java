@@ -1,7 +1,9 @@
 package com.goodluck.checkin.site;
 
 
+import com.goodluck.common.exception.BusinessException;
 import com.goodluck.common.resp.R;
+import com.google.common.base.Throwables;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +20,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.time.Duration;
+
+import static com.goodluck.checkin.utils.SeleniumUtils.safeWaitForElement;
 
 /**
  * @author liuleyi
@@ -51,9 +55,9 @@ public class Shaoshuren {
         return browser;
     }
 
-    @Scheduled(cron = "0 0 7 * * ?")
-    public void loginAndCheckin() {
-        log.info("少数人开始登录并签到...");
+    @Scheduled(fixedDelay = 11 * 60 * 60 * 1000)
+    public void loginAndCheckIn() {
+        log.info("------------------少数人每日签到程序启动----------------");
         WebDriver browser = initBrowser();
         try {
             // 打开登录页面
@@ -65,57 +69,55 @@ public class Shaoshuren {
             // 找到邮箱输入框并输入邮箱
             WebElement emailField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("email")));
             Thread.sleep(1000);
-            emailField.sendKeys(username); // 替换为你的邮箱
+            emailField.sendKeys(username);
 
             // 找到密码输入框并输入密码
             WebElement passwordField = browser.findElement(By.id("password"));
             Thread.sleep(1000);
-            passwordField.sendKeys(password); // 替换为你的密码
+            passwordField.sendKeys(password);
 
             Thread.sleep(1000);
             // 点击登录按钮
             WebElement loginButton = browser.findElement(By.id("login_submit"));
             loginButton.click();
-
+            log.info("少数人登录成功");
             // 等待登录完成
             wait.until(ExpectedConditions.urlContains("/user"));
 
-            // 定位签到按钮
-            WebElement signInButton = new WebDriverWait(browser, 10).until(
-                    ExpectedConditions.presenceOfElementLocated(By.id("checkin")) // 按钮的 ID 为 "checkin"
-            );
-            if (signInButton == null) {
-                log.error("签到按钮未找到！");
+            // 等待签到成功提示
+            WebElement alreadySignIn = safeWaitForElement(browser, By.xpath("//a[contains(text(), '已签到')]"), 5);
+            if (alreadySignIn != null) {
+                log.info("今日已签到！提示信息: " + alreadySignIn.getText());
                 return;
             }
-
-            // 检查按钮是否已禁用（通过 "disabled" 属性或类名）
-            if (signInButton == null || signInButton.getAttribute("class").contains("disabled") ||
-                    signInButton.getAttribute("disabled") != null) {
-                log.info("今日已签到，无需重复操作。");
-            } else {
-                log.info("未签到，尝试签到...");
-                signInButton.click(); // 点击签到按钮
-
-                // 等待签到成功提示
-                WebElement successMessage = new WebDriverWait(browser, 10).until(
-                        ExpectedConditions.presenceOfElementLocated(By.xpath("//p[contains(text(), '已签到')]"))
-                );
-                log.info("签到成功！提示信息: " + successMessage.getText());
+            // 定位签到按钮 // 按钮的 ID 为 "checkin"
+            WebElement signInButton = safeWaitForElement(browser, By.id("checkin"), 1);
+            if (signInButton == null) {
+                throw new BusinessException("签到按钮未找到！");
             }
-        } catch (Exception e) {
-            log.error("签到过程中出现问题: " + e.getMessage());
-        } finally {
+            log.info("少数人未签到，尝试签到...");
+            // 点击签到按钮
+            signInButton.click();
 
+            alreadySignIn = safeWaitForElement(browser, By.xpath("//a[contains(text(), '已签到')]"), 5);
+            // 等待签到成功提示
+            if (alreadySignIn == null) {
+                throw new BusinessException("少数人签到成功按钮未找到,签到失败！");
+            }
+            log.info("少数人签到成功！提示信息: " + alreadySignIn.getText());
+        } catch (Exception e) {
+            log.error("少数人签到过程中出现问题: [{}]", Throwables.getStackTraceAsString(e));
+        } finally {
             // 关闭浏览器
             try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+                Thread.sleep(3000);
+                browser.quit();
+            } catch (Exception e) {
+                log.error("关闭浏览器失败 {}", Throwables.getStackTraceAsString(e));
             }
-            browser.quit();
+
         }
-        log.info("少数人结束登录并签到...");
+        log.info("--------------------少数人每日签到程序结束----------------------");
     }
 
 }

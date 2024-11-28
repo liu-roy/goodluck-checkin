@@ -31,14 +31,14 @@ public class CheckinController {
     @PostMapping("/buguTV")
     @ApiOperation("buguTV")
     public R<Boolean> buguTVCheckIn() {
-        buguTv.loginAndCheckin();
+        buguTv.loginAndCheckIn();
         return R.success(Boolean.TRUE);
     }
 
     @PostMapping("/shaoshuren")
     @ApiOperation("shaoshuren")
     public R<Boolean> shaoshurenCheckIn() {
-        shaoshuren.loginAndCheckin();
+        shaoshuren.loginAndCheckIn();
         return R.success(Boolean.TRUE);
     }
 
