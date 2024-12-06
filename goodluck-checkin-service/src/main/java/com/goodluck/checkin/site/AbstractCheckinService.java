@@ -1,6 +1,7 @@
 package com.goodluck.checkin.site;
 
 import com.goodluck.common.exception.BusinessException;
+import com.google.common.base.Throwables;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.*;
@@ -55,16 +56,16 @@ public abstract class AbstractCheckinService {
             success = performCheckIn(browser);
         } catch (BusinessException e) {
             takeScreenshot(browser, "error");
-            log.error("业务异常: {}", e.getMessage());
+            log.error("业务异常: {}", Throwables.getStackTraceAsString(e));
         } catch (Exception e) {
             takeScreenshot(browser, "error");
-            log.error("签到过程中出现问题: [{}]", e.getMessage(), e);
+            log.error("签到过程中出现问题: [{}]", Throwables.getStackTraceAsString(e));
         } finally {
             try {
                 Thread.sleep(3000);
                 browser.quit();
             } catch (Exception e) {
-                log.error("关闭浏览器失败: [{}]", e.getMessage(), e);
+                log.error("关闭浏览器失败: [{}]",  Throwables.getStackTraceAsString(e));
             }
         }
         log.info("--------- {} 签到程序结束 ---------", this.getClass().getSimpleName());

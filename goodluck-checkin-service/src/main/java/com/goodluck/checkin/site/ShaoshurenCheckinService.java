@@ -21,19 +21,20 @@ import static com.goodluck.checkin.utils.SeleniumUtils.safeWaitForElement;
 @Service
 public class ShaoshurenCheckinService extends AbstractCheckinService {
 
-    @Value("${bugutv.username}")
+    @Value("${shaoshuren.username}")
     private String username;
 
-    @Value("${bugutv.password}")
+    @Value("${shaoshuren.password}")
     private String password;
 
-    private static final String LOGIN_URL = "https://www.bugutv.org";
-    private static final String USER_URL = "https://www.bugutv.org/user";
-
+    private static final String LOGIN_URL = "https://xn--gmqz83awjh.net/auth/login";
+    private static final String USER_URL = "https://xn--gmqz83awjh.net/user";
     @Scheduled(fixedDelay = 11 * 60 * 60 * 1000)
     public void loginAndCheckIn() {
         if (!doCheckIn()) {
-            CheckinRetryScheduler.scheduleTask(this::doCheckIn, 1, TimeUnit.HOURS);
+            CheckinRetryScheduler scheduler = CheckinRetryScheduler.getInstance();
+            scheduler.start();
+            scheduler.scheduleTask(this::loginAndCheckIn, 1, TimeUnit.HOURS);
         }
     }
 
