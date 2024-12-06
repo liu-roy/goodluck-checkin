@@ -1,6 +1,5 @@
 package com.goodluck.checkin.site;
 
-import com.goodluck.checkin.AbstractCheckinService;
 import com.goodluck.checkin.manager.CheckinRetryScheduler;
 import com.goodluck.common.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
