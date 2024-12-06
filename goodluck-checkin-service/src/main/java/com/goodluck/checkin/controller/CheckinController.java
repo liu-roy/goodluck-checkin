@@ -1,8 +1,10 @@
 package com.goodluck.checkin.controller;
 
 
-import com.goodluck.checkin.site.BuguTv;
-import com.goodluck.checkin.site.Shaoshuren;
+//import com.goodluck.checkin.site.BuguTv;
+import com.goodluck.checkin.site.BuguTvCheckinService;
+//import com.goodluck.checkin.site.Shaoshuren;
+import com.goodluck.checkin.site.ShaoshurenCheckinService;
 import com.goodluck.common.resp.R;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -23,9 +25,9 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class CheckinController {
 
-    private final BuguTv buguTv;
+    private final BuguTvCheckinService buguTv;
 
-    private final Shaoshuren shaoshuren;
+    private final ShaoshurenCheckinService shaoshuren;
 
 
     @PostMapping("/buguTV")
