@@ -79,4 +79,3 @@ docker run -d -p 8080:8080 -v /volume1/docker/goodluck-checkin/application.yml:/
 该项目采用 MIT 许可证，详情请参阅 [LICENSE](LICENSE) 文件。
 ```
 
-你可以根据实际情况和需求对上述内容进行修改和完善。
