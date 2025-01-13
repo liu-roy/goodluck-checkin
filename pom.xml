@@ -10,10 +10,8 @@
   <packaging>pom</packaging>
 
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.goodluck</groupId>
   <artifactId>goodluck-checkin</artifactId>
   <version>1.0.0-SNAPSHOT</version>
-  <name>everyday-checkin</name>
 
 
   <modules>
