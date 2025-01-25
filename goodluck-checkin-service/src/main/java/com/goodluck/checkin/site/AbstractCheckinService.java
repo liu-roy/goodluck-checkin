@@ -55,10 +55,10 @@ public abstract class AbstractCheckinService {
             // 执行签到
             success = performCheckIn(browser);
         } catch (BusinessException e) {
-            takeScreenshot(browser, "error");
+           // takeScreenshot(browser, "error");
             log.error("业务异常: {}", Throwables.getStackTraceAsString(e));
         } catch (Exception e) {
-            takeScreenshot(browser, "error");
+            //takeScreenshot(browser, "error");
             log.error("签到过程中出现问题: [{}]", Throwables.getStackTraceAsString(e));
         } finally {
             try {
