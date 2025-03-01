@@ -27,8 +27,12 @@ public class ShaoshurenCheckinService extends AbstractCheckinService {
     @Value("${shaoshuren.password}")
     private String password;
 
-    private static final String LOGIN_URL = "https://xn--gmqz83awjh.net/auth/login";
-    private static final String USER_URL = "https://xn--gmqz83awjh.net/user";
+    @Value("${shaoshuren.url}")
+    private String LOGIN_URL = "https://xn--gmqz83awjh.net/auth/login";
+
+    private String USER_URI = "/user";
+
+
     @Scheduled(fixedDelay = 11 * 60 * 60 * 1000)
     public void loginAndCheckIn() {
         if (!doCheckIn()) {
@@ -55,7 +59,7 @@ public class ShaoshurenCheckinService extends AbstractCheckinService {
         WebElement loginButton = browser.findElement(By.id("login_submit"));
         loginButton.click();
         // 等待登录完成
-        wait.until(ExpectedConditions.urlContains("/user"));
+        wait.until(ExpectedConditions.urlContains(USER_URI));
     }
 
     @Override

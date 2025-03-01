@@ -80,6 +80,10 @@ public class CheckinRetryScheduler {
      */
     public void scheduleTask(Runnable task, long delay, TimeUnit unit) {
         if (isRunning.get()) {
+            if (delayQueue.size() > 20) {
+                log.warn("delay queue is more than 20, reject new task.");
+                return;
+            }
             delayQueue.put(new DelayedTask(task, delay, unit));
         } else {
             throw new IllegalStateException("任务调度器未启动，请调用 start() 方法！");

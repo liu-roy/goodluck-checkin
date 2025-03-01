@@ -27,8 +27,10 @@ public class BuguTvCheckinService extends AbstractCheckinService {
     @Value("${bugutv.password}")
     private String password;
 
-    private static final String LOGIN_URL = "https://www.bugutv.org";
-    private static final String USER_URL = "https://www.bugutv.org/user";
+    @Value("${bugutv.url}")
+    private String LOGIN_URL = "https://www.bugutv.vip";
+
+    private final String USER_URI = "/user";
 
 
     @Scheduled(fixedDelay = 11 * 60 * 60 * 1000+30000)
@@ -70,7 +72,7 @@ public class BuguTvCheckinService extends AbstractCheckinService {
 
     @Override
     protected boolean performCheckIn(WebDriver browser) {
-        browser.get(USER_URL);
+        browser.get(LOGIN_URL+USER_URI);
 
         // 检查是否已经签到
         WebElement alreadySignIn = safeWaitForElement(browser, By.xpath("//button[contains(text(), '今日已签到')]"), 10);
@@ -102,13 +104,6 @@ public class BuguTvCheckinService extends AbstractCheckinService {
                 .equals(true));
     }
 
-
-    @Scheduled(cron = "0 0 6 * * ?") // 每天早上6点执行
-    public void scheduleCheckIn() {
-        if (!doCheckIn()) {
-            log.warn("签到失败，稍后尝试再次签到...");
-        }
-    }
 
 
 }
