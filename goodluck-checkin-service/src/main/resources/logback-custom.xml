@@ -14,9 +14,9 @@
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <fileNamePattern>${FILE_APPLICATION}.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <!-- each file should be at most ${maxFileSize}, keep ${maxHistory} days worth of history, but at most ${totalSizeCap} -->
-            <maxFileSize>2GB</maxFileSize>
+            <maxFileSize>100MB</maxFileSize>
             <maxHistory>14</maxHistory>
-            <totalSizeCap>10GB</totalSizeCap>
+            <totalSizeCap>200MB</totalSizeCap>
             <cleanHistoryOnStart>true</cleanHistoryOnStart>
         </rollingPolicy>
     </appender>
