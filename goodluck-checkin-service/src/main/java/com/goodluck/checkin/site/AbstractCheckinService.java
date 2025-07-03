@@ -19,6 +19,9 @@ public abstract class AbstractCheckinService {
 
     private static final String SCREENSHOT_BASE_PATH = "/opt/images/";
 
+    @Value("${takephoto}")
+    private boolean takephoto;
+
 
     // 初始化浏览器
     protected WebDriver initBrowser() {
@@ -55,10 +58,10 @@ public abstract class AbstractCheckinService {
             // 执行签到
             success = performCheckIn(browser);
         } catch (BusinessException e) {
-           // takeScreenshot(browser, "error");
+            takeScreenshot(browser, "error");
             log.error("业务异常: {}", Throwables.getStackTraceAsString(e));
         } catch (Exception e) {
-            //takeScreenshot(browser, "error");
+            takeScreenshot(browser, "error");
             log.error("签到过程中出现问题: [{}]", Throwables.getStackTraceAsString(e));
         } finally {
             try {
@@ -75,6 +78,9 @@ public abstract class AbstractCheckinService {
 
     protected void takeScreenshot(WebDriver browser, String elementDescription) {
         try {
+            if(!takephoto){
+                return;
+            }
             // 获取当前时间，生成文件名
             LocalDateTime now = LocalDateTime.now();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
