@@ -57,7 +57,7 @@ swagger:
   enabled: true
   scan-package: com.goodluck.checkin
 
-
+takephoto: false
 bugutv:
   username: xxxx
   password: xxxx
