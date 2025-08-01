@@ -12,6 +12,7 @@ on:
   push:
     branches:
       - main
+      - feature/buguV2
 
 jobs:
   build:
