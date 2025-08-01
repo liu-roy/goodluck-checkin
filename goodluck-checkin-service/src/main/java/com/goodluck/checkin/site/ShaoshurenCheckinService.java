@@ -27,10 +27,13 @@ public class ShaoshurenCheckinService extends AbstractCheckinService {
     @Value("${shaoshuren.password}")
     private String password;
 
-    @Value("${shaoshuren.url}")
-    private String LOGIN_URL = "https://xn--gmqz83awjh.net/auth/login";
+    @Value("${shaoshuren.url:https://xn--gmqz83awjh.org}")
+    private String baseUrl;
 
-    private String USER_URI = "/user";
+    @Value("${shaoshuren.loginPath:/auth/login}")
+    private String loginPath;
+
+    private String userPath = "/user";
 
 
     @Scheduled(fixedDelay = 11 * 60 * 60 * 1000)
@@ -44,7 +47,7 @@ public class ShaoshurenCheckinService extends AbstractCheckinService {
 
     @Override
     protected void login(WebDriver browser) {
-        browser.get(LOGIN_URL);
+        browser.get(baseUrl + loginPath);
         // 等待页面加载
         WebDriverWait wait = new WebDriverWait(browser, Duration.ofSeconds(10).getSeconds());
 
@@ -59,7 +62,7 @@ public class ShaoshurenCheckinService extends AbstractCheckinService {
         WebElement loginButton = browser.findElement(By.id("login_submit"));
         loginButton.click();
         // 等待登录完成
-        wait.until(ExpectedConditions.urlContains(USER_URI));
+        wait.until(ExpectedConditions.urlContains(userPath));
     }
 
     @Override
