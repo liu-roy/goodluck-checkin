@@ -38,11 +38,11 @@ public class ShaoshurenCheckinService extends AbstractCheckinService {
 
     @Scheduled(fixedDelay = 11 * 60 * 60 * 1000)
     public void loginAndCheckIn() {
-        if (!doCheckIn()) {
-            CheckinRetryScheduler scheduler = CheckinRetryScheduler.getInstance();
-            scheduler.start();
-            scheduler.scheduleTask(this::loginAndCheckIn, 1, TimeUnit.HOURS);
-        }
+        // if (!doCheckIn()) {
+        //     CheckinRetryScheduler scheduler = CheckinRetryScheduler.getInstance();
+        //     scheduler.start();
+        //     scheduler.scheduleTask(this::loginAndCheckIn, 1, TimeUnit.HOURS);
+        // }
     }
 
     @Override
