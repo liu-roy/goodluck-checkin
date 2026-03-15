@@ -51,9 +51,9 @@ jobs:
         run: |
           cat ~/.m2/settings.xml | tee full_maven_settings.log
 
-      # 上传 artifact 保存完整内容
+          # 上传 artifact 保存完整内容
       - name: Upload Maven settings
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: maven-settings
           path: full_maven_settings.log
